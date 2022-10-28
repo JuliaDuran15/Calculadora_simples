@@ -9,8 +9,8 @@ TITLE Julia Duran, Thayná Aquino. RA_22009210, RA_22002057
     resultado  db 10, '  O resultado: ','$'
     DESEJA DB 10,'  Deseja reiniciar o programa? (se sim digite s): ','$'
     IMP DB 10,'  Conta impossivel dividendo igual a ZERO!',10,'$'
-    resultado_quoci db 10,' O quociente eh: ','$'
-    resultado_rest db 10,' O resto eh: ','$'
+    resultado_quoci db 10,'  O quociente eh: ','$'
+    resultado_rest db 10,'  O resto eh: ','$'
 
 .CODE
 main proc
@@ -72,19 +72,21 @@ SUBT:
 MULTI: CALL MULTIPLICA
        JMP IMPRIME1
 
-DIVI: 
-    CMP AL, 00H
-    JZ IMPOSSIVEL
-    CMP BL,AL
-    JL NAO
+
+DIVI:   CMP AL, 00H
+        JZ IMPOSSIVEL
+        CALL divis
+        JMP IMPRIME3
+        
 IMPOSSIVEL: LEA DX,IMP
             MOV AH,09
             INT 21H
             JMP SAI
 
-NAO:    XOR CL,CL
-
 IMPRIME3: CALL IMPRIME_DV
+            JMP SAI
+
+
 
 IMPRIME1: CALL IMPRIME
             JMP SAI
@@ -191,7 +193,34 @@ IMPRIME_DV proc
     OR DL,30H   ;transforma num em digito novamente
     MOV AH,02
     INT 21H
+
+    RET
 IMPRIME_DV ENDP
+
+divis proc
+
+    MOV CH,4
+    xor cl,cl
+    SHl AL,4
+    shr cl,4
+VOLTAD:
+    SUB BL,AL
+    JS NEGATIVO
+    OR CL,1
+    JMP FIMD
+NEGATIVO:
+    OR CL,0
+    ADD Bl,AL
+FIMD:
+    SHR AL,1
+    SHL CL,1
+    DEC CH
+    CMP CH,0
+    JNZ VOLTAD
+    
+    RET
+
+divis endp
 
 
 END MAIN 
