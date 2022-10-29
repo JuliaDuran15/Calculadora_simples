@@ -205,19 +205,21 @@ divis proc
     shr cl,4
 VOLTAD:
     SUB BL,AL
-    JS NEGATIVO
+    TEST BL,80H
+    JNZ NEGATIVO
     OR CL,1
     JMP FIMD
 NEGATIVO:
     OR CL,0
     ADD Bl,AL
 FIMD:
-    SHR AL,1
+    SHL BL,1
     SHL CL,1
     DEC CH
     CMP CH,0
     JNZ VOLTAD
     
+    SHR BL,4
     RET
 
 divis endp
