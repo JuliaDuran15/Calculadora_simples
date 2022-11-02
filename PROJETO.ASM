@@ -1,3 +1,4 @@
+
 TITLE Julia Duran, Thayná Aquino. RA_22009210, RA_22002057
 
 .MODEL SMALL
@@ -23,8 +24,7 @@ main proc
 
 
     LEA DX,SB
-    MOV AH,09
-    INT 21H
+    CALL impressao_s
 
 INICIO:     ;caso deseje volta do inicio
     XOR AX,AX
@@ -79,8 +79,7 @@ DIVI:   CMP AL, 00H
         JMP IMPRIME3
         
 IMPOSSIVEL: LEA DX,IMP
-            MOV AH,09
-            INT 21H
+            CALL impressao_s
             JMP SAI
 
 IMPRIME3: CALL IMPRIME_DV
@@ -198,29 +197,32 @@ IMPRIME_DV proc
 IMPRIME_DV ENDP
 
 divis proc
-
-    MOV CH,4
-    xor cl,cl
-    SHl AL,4
-    shr cl,4
+        MOV CH,5
+        xor cl,cl
+        SHl AL,4
 VOLTAD:
-    SUB BL,AL
-    JS NEGATIVO
-    OR CL,1
-    JMP FIMD
+        SHL CL,1
+        SUB BL,AL
+        JS NEGATIVO
+        OR CL,1
+        JMP FIMD
 NEGATIVO:
-    OR CL,0
-    ADD Bl,AL
+        OR CL,0
+        ADD Bl,AL
 FIMD:
-    SHR AL,1
-    SHL CL,1
-    DEC CH
-    CMP CH,0
-    JNZ VOLTAD
-    
-    RET
+        SHR AL,1
+        DEC CH
+        CMP CH,0
+        JNZ VOLTAD
 
-divis endp
+        RET
 
+divis ENDP
+
+impressao_S proc
+        MOV AH,09
+        INT 21H
+        ret
+impressao_S ENDP
 
 END MAIN 
