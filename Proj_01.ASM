@@ -11,6 +11,7 @@ TITLE Julia Duran, Thayná Aquino. RA_22009210, RA_22002057
     IMP DB 10,'  Conta impossivel dividendo igual a ZERO!',10,'$'
     resultado_quoci db 10,'  O quociente eh: ','$'
     resultado_rest db 10,'  O resto eh: ','$'
+    operacao_N db 10,13,'  Operacao escolhida nao eh valida.',10,'$'
 
 .CODE
 main proc
@@ -31,6 +32,8 @@ INICIO:     ;Caso deseje voltar do inicio.
     MOV AH,02   ;pula linha
     MOV DL,10
     INT 21H
+
+ERRO:
 ;Recebendo os numeros e imprimindo a mensagem para o usuario.
     LEA DX,msg1
     CALL COLLHE_INFO
@@ -54,6 +57,11 @@ INICIO:     ;Caso deseje voltar do inicio.
     JZ MULTI
     CMP CL,47
     JZ DIVI
+
+;caso a operacao escolhida nao exista o programa volta
+    LEA DX,operacao_N
+    CALL impressao_S
+    jmp ERRO
 
 SOMA: ADD BL,AL ;Soma.
     
